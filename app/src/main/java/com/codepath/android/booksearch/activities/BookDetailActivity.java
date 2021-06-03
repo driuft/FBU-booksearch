@@ -30,6 +30,9 @@ import com.codepath.android.booksearch.models.Book;
 import org.parceler.Parcels;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 public class BookDetailActivity extends AppCompatActivity {
     private ImageView ivBookCover;
@@ -69,7 +72,7 @@ public class BookDetailActivity extends AppCompatActivity {
 
             @Override
             public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                prepareShareIntent(((BitmapDrawable) resource).getBitmap());
+                prepareShareIntent(((BitmapDrawable) resource).getBitmap(), book.getTitle());
                 attachShareIntentAction();
                 return false;
             }
@@ -108,17 +111,25 @@ public class BookDetailActivity extends AppCompatActivity {
     }
 
     // Gets the image URI and setup the associated share intent to hook into the provider
-    public void prepareShareIntent(Bitmap drawableImage) {
-        // Fetch Bitmap Uri locally
-        // getExternalFilesDir() + "/Pictures" should match the declaration in fileprovider.xml paths
-        File file = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "share_image_" + System.currentTimeMillis() + ".png");
+    public void prepareShareIntent(Bitmap drawableImage, String bookTitle) {
 
-        // wrap File object into a content provider. NOTE: authority here should match authority in manifest declaration
-        Uri bmpUri;
-        bmpUri = FileProvider.getUriForFile(BookDetailActivity.this, "com.codepath.fileprovider", file);
+        Uri bmpUri = null;
+        File file = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "share_image_" + System.currentTimeMillis() + ".png");
+        try {
+            FileOutputStream out = new FileOutputStream(file);
+            drawableImage.compress(Bitmap.CompressFormat.PNG, 90, out);
+            out.close();
+            bmpUri = FileProvider.getUriForFile(BookDetailActivity.this, "com.codepath.fileprovider", file);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         // Construct share intent as described above based on bitmap
         shareIntent = new Intent();
         shareIntent.setAction(Intent.ACTION_SEND);
+        shareIntent.putExtra(Intent.EXTRA_TEXT, "Title: " + bookTitle);
         shareIntent.putExtra(Intent.EXTRA_STREAM, bmpUri);
         shareIntent.setType("image/*");
     }
