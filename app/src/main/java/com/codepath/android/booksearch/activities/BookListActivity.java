@@ -74,8 +74,6 @@ public class BookListActivity extends AppCompatActivity {
         // Set layout manager to position the items
         rvBooks.setLayoutManager(new LinearLayoutManager(this));
 
-        // Fetch the data remotely
-        //fetchBooks("");
     }
 
     // Executes an API call to the OpenLibrary search endpoint, parses the results
