@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
 import com.codepath.android.booksearch.R;
@@ -32,6 +33,8 @@ public class BookDetailActivity extends AppCompatActivity {
 
         // Extract book object from intent extras
         Book book = (Book) Parcels.unwrap(getIntent().getParcelableExtra(BookListActivity.KEY_BOOK));
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(book.getTitle());
 
         // Use book object to populate data into views
