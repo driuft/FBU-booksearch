@@ -1,20 +1,17 @@
 package com.codepath.android.booksearch.activities;
 
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.os.Parcelable;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.bumptech.glide.Glide;
 import com.codepath.android.booksearch.R;
 import com.codepath.android.booksearch.models.Book;
 
-import org.parceler.Parcel;
 import org.parceler.Parcels;
 
 public class BookDetailActivity extends AppCompatActivity {
@@ -40,7 +37,6 @@ public class BookDetailActivity extends AppCompatActivity {
         // Use book object to populate data into views
         tvTitle.setText(book.getTitle());
         tvAuthor.setText(book.getAuthor());
-        Log.d("Book Date: ", book.getDate());
         tvDate.setText(book.getDate());
         Glide.with(getApplicationContext()).load(book.getCoverUrl()).into(ivBookCover);
     }

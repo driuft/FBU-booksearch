@@ -53,7 +53,10 @@ public class Book {
             }
             book.title = jsonObject.has("title_suggest") ? jsonObject.getString("title_suggest") : "";
             book.author = getAuthor(jsonObject);
-            book.date = jsonObject.has("first_publish_year") ? jsonObject.getString("first_publish_year") : "";
+
+            JSONArray publishYears = jsonObject.getJSONArray("publish_year");
+            book.date = publishYears.getString(0);
+
         } catch (JSONException e) {
             e.printStackTrace();
             return null;
