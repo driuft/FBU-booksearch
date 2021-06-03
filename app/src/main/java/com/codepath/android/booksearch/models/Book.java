@@ -5,13 +5,20 @@ import android.text.TextUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcel;
 
 import java.util.ArrayList;
 
+@Parcel
 public class Book {
     private String openLibraryId;
     private String author;
     private String title;
+    private String date;
+
+    // empty constructor needed by the Parceler library
+    public Book() {
+    }
 
     public String getOpenLibraryId() {
         return openLibraryId;
@@ -24,6 +31,8 @@ public class Book {
     public String getAuthor() {
         return author;
     }
+
+    public String getDate() { return date; }
 
     // Get book cover from covers API
     public String getCoverUrl() {
@@ -44,6 +53,7 @@ public class Book {
             }
             book.title = jsonObject.has("title_suggest") ? jsonObject.getString("title_suggest") : "";
             book.author = getAuthor(jsonObject);
+            book.date = jsonObject.has("first_publish_year") ? jsonObject.getString("first_publish_year") : "";
         } catch (JSONException e) {
             e.printStackTrace();
             return null;
@@ -66,6 +76,15 @@ public class Book {
             return "";
         }
     }
+
+//    private static String getDate(final JSONObject jsonObject) {
+//        try {
+//            final JSONObject date = jsonObject.getJSONObject("publish_date");
+//            return date.toString();
+//        } catch (JSONException e) {
+//            return "";
+//        }
+//    }
 
     // Decodes array of book json results into business model objects
     public static ArrayList<Book> fromJson(JSONArray jsonArray) {
