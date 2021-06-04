@@ -36,6 +36,26 @@ public class BookListActivity extends AppCompatActivity {
     private BookClient client;
     private ArrayList<Book> abooks;
     public static final String KEY_BOOK = "Book";
+    MenuItem actionProgressItem;
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        // Store instance of the menu item containing progress
+        actionProgressItem = menu.findItem(R.id.actionProgress);
+
+        // Return to finish
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    public void showProgressBar() {
+        // Show progress item
+        actionProgressItem.setVisible(true);
+    }
+
+    public void hideProgressBar() {
+        // Hide progress item
+        actionProgressItem.setVisible(false);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,6 +117,7 @@ public class BookListActivity extends AppCompatActivity {
                         for (Book book : books) {
                             abooks.add(book); // add book through the adapter
                         }
+                        hideProgressBar();
                         bookAdapter.notifyDataSetChanged();
                     }
                 } catch (JSONException e) {
@@ -123,6 +144,7 @@ public class BookListActivity extends AppCompatActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+                showProgressBar();
                 // perform query here
                 fetchBooks(query);
 
